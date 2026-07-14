@@ -1,0 +1,233 @@
+#include "DFRobotDFPlayerMini.h"
+#include <SoftwareSerial.h>
+//#include <HardwareSerial.h>
+
+SoftwareSerial softSerial1(10, 11);  //rx, tx
+//SoftwareSerial softSerial2(5, 6);    //rx, tx
+//HardwareSerial hardSerial1(14,15);
+
+DFRobotDFPlayerMini DFPlayer1;
+DFRobotDFPlayerMini DFPlayer2;
+
+#define G A6
+#define A A5
+#define B A4
+#define C A3
+#define D A2
+#define E A1
+#define F A0
+#define buttonPin 2
+
+const int playingThreshold = 5;
+
+int AVal;
+int BVal;
+int CVal;
+int DVal;
+int EVal;
+int FVal;
+int GVal;
+
+//long lastHit;
+//long lastVal;
+
+bool isPlaying = false;
+//bool canPlay = true;
+bool specialMode = false;
+
+void setup() {
+
+  Serial.begin(115200);
+  //Serial2.begin(19200);
+  softSerial1.begin(9600);
+  //hardSerial1.begin(115200);
+  //softSerial2.begin(9600);
+
+  if (!DFPlayer1.begin(softSerial1, /*isACK = */ false, /*doReset = */ false)) {  //Use serial to communicate with mp3.
+    Serial.println("Error starting DFplayer");
+  }
+  // delay(1000);
+  // if (!DFPlayer2.begin(softSerial1, /*isACK = */ false, /*doReset = */ false)) {  //Use serial to communicate with mp3.
+  //   Serial.println("Error starting DFplayer");
+  // }
+
+  DFPlayer1.volume(30);  //Set volume value. From 0 to 30
+  //DFPlayer2.volume(20);
+
+  
+  //DFPlayer2.play(5);  //Play the first mp3
+  //pinMode(F, INPUT);
+  pinMode(buttonPin, INPUT);
+}
+
+void loop() {
+  AVal = analogRead(A);
+  BVal = analogRead(B);
+  CVal = analogRead(C);
+  DVal = analogRead(D);
+  EVal = analogRead(E);
+  FVal = analogRead(F);
+  GVal = analogRead(G);
+
+  if (isPlaying && !specialMode) {
+    if (AVal > playingThreshold) {
+      if (943 > AVal && AVal > 938) {
+        DFPlayer1.play(8);  //GA
+      } else if (908 > AVal && AVal > 900) {
+        DFPlayer1.play(1);  //AA
+      } else if (881 > AVal && AVal > 872) {
+        DFPlayer1.play(14);  //AB
+      } else if (865 > AVal && AVal > 858) {
+        DFPlayer1.play(15);  //AC
+      } else if (833 > AVal && AVal > 827) {
+        DFPlayer1.play(16);  //AD
+      } else if (812 > AVal && AVal > 802) {
+        DFPlayer1.play(17);  //AE
+      } else if (335 > AVal && AVal > 325) {
+        DFPlayer1.play(18);  //AF
+      }
+    } else if (BVal > playingThreshold) {
+      if (915 > BVal && BVal > 908) {
+        DFPlayer1.play(9);  //GB
+      } else if (881 > BVal && BVal > 872) {
+        DFPlayer1.play(14);  //BA
+      } else if (856 > BVal && BVal > 846) {
+        DFPlayer1.play(2);  //BB
+      } else if (842 > BVal && BVal > 832) {
+        DFPlayer1.play(19);  //BC
+      } else if (812 > BVal && BVal > 802) {
+        DFPlayer1.play(20);  //BD
+      } else if (790 > BVal && BVal > 780) {
+        DFPlayer1.play(21);  //BE
+      } else if (331 > BVal && BVal > 321) {
+        DFPlayer1.play(22);  //BF
+      }
+    } else if (CVal > playingThreshold) {
+      if (900 > GVal && GVal > 890) {
+        DFPlayer1.play(10);  //GC
+      } else if (865 > AVal && AVal > 858) {
+        DFPlayer1.play(15);  //CA
+      } else if (842 > BVal && BVal > 832) {
+        DFPlayer1.play(19);  //CB
+      } else if (827 > CVal && CVal > 817) {
+        DFPlayer1.play(3);  //CC
+      } else if (800 > CVal && CVal > 790) {
+        DFPlayer1.play(23);  //CD
+      } else if (778 > CVal && CVal > 768) {
+        DFPlayer1.play(24);  //CE
+      } else if (330 > CVal && CVal > 320) {
+        DFPlayer1.play(25);  //CF
+      }
+    } else if (DVal > playingThreshold) {
+      if (882 > DVal && DVal > 872) {
+        DFPlayer1.play(11);  //DG
+      } else if (850 > DVal && DVal > 840) {
+        DFPlayer1.play(16);  //DA
+      } else if (827 > DVal && DVal > 817) {
+        DFPlayer1.play(20);  //DB
+      } else if (813 > DVal && DVal > 803) {
+        DFPlayer1.play(23);  //DC
+      } else if (785 > DVal && DVal > 775) {
+        DFPlayer1.play(4);  //DD
+      } else if (765 > DVal && DVal > 755) {
+        DFPlayer1.play(26);  //DE
+      } else if (327 > DVal && DVal > 317) {
+        DFPlayer1.play(27);  //DF
+      }
+    } else if (EVal > playingThreshold) {
+      if (838 > EVal && EVal > 830) {
+        DFPlayer1.play(12);  //EG
+      } else if (812 > EVal && EVal > 802) {
+        DFPlayer1.play(17);  //EA
+      } else if (790 > EVal && EVal > 780) {
+        DFPlayer1.play(21);  //EB
+      } else if (778 > EVal && EVal > 768) {
+        DFPlayer1.play(24);  //EC
+      } else if (752 > EVal && EVal > 742) {
+        DFPlayer1.play(11);  //ED
+      } else if (734 > EVal && EVal > 724) {
+        DFPlayer1.play(5);  //EE
+      } else if (321 > EVal && EVal > 311) {
+        DFPlayer1.play(28);  //EF
+      }
+    } else if (FVal > 0) {
+      if (91 > FVal && FVal > 87) {
+        DFPlayer1.play(13);  //FG
+      } else if (78 > FVal && FVal > 73) {
+        DFPlayer1.play(18);  //FA
+      } else if (70 > FVal && FVal > 65) {
+        DFPlayer1.play(22);  //FB
+      } else if (65 > FVal && FVal > 60) {
+        DFPlayer1.play(25);  //FC
+      } else if (58 > FVal && FVal > 53) {
+        DFPlayer1.play(27);  //FD
+      } else if (53 > FVal && FVal > 48) {
+        DFPlayer1.play(28);  //FE
+      } else if (330 > FVal && FVal > 310) {
+        DFPlayer1.play(6);  //FF
+      }
+    } else if (GVal > playingThreshold) {
+      // DFPlayer1.play(7);
+      // isPlaying = true;
+      if (981 > GVal && GVal > 976) {
+        DFPlayer1.play(7);  //GG
+      } else if (943 > GVal && GVal > 938) {
+        DFPlayer1.play(8);  //GA
+      } else if (915 > GVal && GVal > 908) {
+        DFPlayer1.play(9);  //GB
+      } else if (900 > GVal && GVal > 890) {
+        DFPlayer1.play(10);  //GC
+      } else if (865 > GVal && GVal > 858) {
+        DFPlayer1.play(11);  //GD
+      } else if (838 > GVal && GVal > 830) {
+        DFPlayer1.play(12);  //GE
+      } else if (338 > GVal && GVal > 330) {
+        DFPlayer1.play(13);  //GF
+      }
+    }
+  }
+
+  Serial.println(GVal);
+//   Serial.println(AVal);
+//   Serial.println(BVal);
+//   Serial.println(CVal);
+//   Serial.println(DVal);
+//   Serial.println(EVal);
+// Serial.println(FVal);
+  if (specialMode) {
+    if (AVal > playingThreshold || BVal > playingThreshold || CVal > playingThreshold || DVal > playingThreshold || EVal > playingThreshold || FVal > playingThreshold || GVal > playingThreshold) {
+      if (!isPlaying) {
+        isPlaying = true;
+        int x = random(29, 34);
+        DFPlayer1.play(x);
+      }
+    } else {
+      isPlaying = false;
+    }
+  }
+
+  if (digitalRead(buttonPin) == HIGH) {
+    delay(50);  // Debounce
+    unsigned long pressTime = millis();
+
+    // Wait until button is released or 10 seconds have passed
+    while (digitalRead(buttonPin) == HIGH) {
+      if (5500 > millis() - pressTime && millis() - pressTime > 4500) {
+        specialMode = true;
+        Serial.println("Special Mode ON");
+        return;
+      } else if (millis() - pressTime > 10000) {  // Long press (10 sec)
+        isPlaying = false;
+        Serial.println("Playback OFF (long press)");
+        return;
+      }
+    }
+
+    // If short press, toggle play state
+    isPlaying = !isPlaying;
+    if(isPlaying) {
+    DFPlayer1.play(1);}
+    Serial.println(isPlaying ? "Playback ON" : "Playback OFF");
+  }
+  delay(100);
+}
